@@ -197,12 +197,14 @@ endfunction
 function! s:Send(tmux_packet)
 
     " Pane not selected! Save text and open selection dialog
-    if len(a:tmux_packet["target_pane"]) == 0
-        let s:retry_send = a:tmux_packet
-        return s:SelectPane(a:tmux_packet)
+
+    if !exists("g:VimuxRunnerIndex")
+      echo "No vimux runner pane/window. Create one with VimuxOpenRunner"
+      return 
     endif
 
-    let target = a:tmux_packet["target_pane"]
+    let target = g:VimuxRunnerIndex
+    "let target = a:tmux_packet["target_pane"]
     let type = a:tmux_packet["type"]
 
     if type == "code" || type == "cmd"
